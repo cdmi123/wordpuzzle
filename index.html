@@ -1,0 +1,102 @@
+
+<table>
+	<tr>
+		<td><input type="text" id="text" onclick="enable_btn()" ></td>
+		<td><input type="button" id="gen_btn" onclick="fun()" value="Generate 16 char"></td>
+	</tr>
+	<tr>
+		<td><input type="text" id="ans" disabled onkeyup="change_char()"></td>
+	</tr>
+</table>
+
+ <br><br>
+
+
+<script type="text/javascript">
+
+	function fun() {
+		var text = document.getElementById('text').value;
+		var text_upper = text.toUpperCase();
+
+			let result = '';
+		 	const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    		const charactersLength = characters.length;
+    			let counter = 0;
+    				while (counter < 16-text_upper.length) {
+      					result += characters.charAt(Math.floor(Math.random() * charactersLength));
+      						counter += 1;
+    				}
+
+    			result = result+text_upper;
+
+
+    		var shuffledWord = '';
+    			word = result.split('');
+    				while (word.length > 0) {
+      						shuffledWord +=  word.splice(word.length * Math.random() << 0, 1);
+    				}
+
+    			word = shuffledWord.split('');
+    			var elem = document.getElementsByClassName('btn');
+
+    			if(elem.length!=0)
+    			{
+	    			document.querySelectorAll(".btn").forEach(el => el.remove());
+	    		}
+
+    			for (var i = 0; i < 16 ; i++) {
+
+    				var x = document.createElement("BUTTON");
+  					var t = document.createTextNode(word[i]);
+  						x.appendChild(t);
+  						x.classList.add('btn');
+  						x.setAttribute("value", word[i]);
+  						x.setAttribute("id",i);
+  						x.setAttribute("style","margin-right:5px");
+  						x.setAttribute("onclick", "get_text('" + word[i] + "',"+i+")");
+  						document.body.appendChild(x);
+    			}
+    			document.getElementById("gen_btn").disabled = true;
+    			document.getElementById("ans").disabled = false;
+    			document.getElementById("text").disabled = true;
+	}
+
+	let id_array = [];
+	let char_array = [];
+	var char_array2 = [];
+
+
+	function get_text(text,id) {
+
+		char_array.push(text);
+		char_array2.push(text);
+		id_array.push(id);
+
+		document.getElementById(id).innerText="";
+		document.getElementById('ans').value += text;
+	}
+
+	function findMismatches(arr1, arr2) {
+  		const mismatches = arr1.filter(item => !arr2.includes(item));
+  		return mismatches;
+	}
+
+	function change_char() {
+
+		var text = document.getElementById('ans').value;
+		text_array = text.split('');
+		const mismatchedChar = findMismatches(char_array, text_array);
+		
+		if(mismatchedChar.length!=0)
+		{
+			const index = char_array2.indexOf(mismatchedChar[0]);
+			document.getElementById(id_array[index]).innerText = mismatchedChar[0];
+		}
+
+		char_array = char_array.filter((v,i)=>{ 
+			return v!=mismatchedChar
+		});
+	}
+
+
+</script>
